@@ -25,9 +25,9 @@ const App = () => {
     window.URL.revokeObjectURL(url)
   }
 
-  // proof of concept from Riesbeck for fetching data from a website
-  async function test() {
-    var data;
+  // based on proof of concept from Riesbeck for fetching data from a website
+  async function fetchData() {
+    var data = Array();
     const url = 'https://www.ymcachicago.org/program-search/?locations=LV&locations=MT&locations=SS&programs=AQ-Aquatics&keywords=';
     const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url); // fixing cors error using this
     const response = await fetch(proxyUrl);
@@ -36,16 +36,25 @@ const App = () => {
     } else {
       const text = await response.text();
       const doc = new DOMParser().parseFromString(text, 'text/html');
-      const firstEventTitle = doc.querySelector('.section-container .section-container .program-desc__title').innerText;
-      console.log(firstEventTitle)
+      const firstRow = doc.querySelector('.section-container .section-container .table-responsive .program-table thead tr').children;
+      // iterate over each item in the first row and print
+      // we need to probably store this into an array to use as a lookup table for the
+      // essential fields we need to put into the csv
+      for (let i = 0; i < firstRow.length; i++) {
+        console.log(firstRow[i].innerText.trim());
+        data.push(firstRow[i].innerText.trim());
+      }
     }
+    console.log(data)
   }
 
 
   return (
     <div className="App">
       <h1>Test</h1>
-      <button onClick={download}>Download</button>
+      <button onClick={download}>Download File</button>
+      <br />
+      <button onClick={fetchData}>Fetch data</button>
     </div>
   );
 };
