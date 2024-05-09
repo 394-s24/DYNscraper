@@ -12,7 +12,42 @@ const YMCAscraper = async (url) => {
     );
 
     for (const event of events) {
+      //console.log("event is ", event);
       const event_title = await event.querySelector(".program-desc__title");
+
+      let event_description_data = await event.querySelector(
+        ".program-desc__content"
+      );
+
+      let event_description_list = event_description_data.innerText.split("\n");
+
+      //console.log(event_description_list);
+
+      let address = null;
+
+      let description = "";
+
+      let contact = null;
+
+      for (const data of event_description_list) {
+        // if we aren't just looking at whitespace
+        if (data.trim().length !== 0) {
+          if (data.includes("Location")) {
+            address = data.split(":")[1].trim();
+          } else if (data.includes("Contact:")) {
+            contact = data.split(":")[1].trim();
+          } else {
+            description += data;
+          }
+        }
+      }
+
+      //break down the address
+      //console.log(address.split(","))
+
+      // for (const address_data of address.split(",")) {
+      //   console.log(address_data.trim())
+      // }
 
       const event_rows = await event.querySelectorAll(
         ".program-table tbody tr"
@@ -22,6 +57,12 @@ const YMCAscraper = async (url) => {
         let entry = {};
 
         entry["Title"] = event_title.innerText;
+
+        entry["Description"] = description;
+
+        address ? (entry["Address"] = address) : null;
+
+        contact ? (entry["Contact"] = contact) : null;
 
         const event_data = data.querySelectorAll("td");
 
@@ -51,6 +92,13 @@ const YMCAscraper = async (url) => {
               } catch (err) {
                 console.log("error is ", err);
               }
+            } else if (event_data_label.innerText === "Day") {
+              try {
+                let days = event_data_value.innerHTML.replaceAll("<br>", ", ");
+                entry["Day"] = days;
+              } catch (err) {
+                console.log("error is ", err);
+              }
             } else {
               entry[event_data_label.innerText] = event_data_value.innerHTML;
             }
@@ -63,9 +111,9 @@ const YMCAscraper = async (url) => {
 
   console.log("programs are ", programs);
 
+  console.log("example description is", programs[0]["Description"]);
+
   return programs;
 };
-
-
 
 export { YMCAscraper };

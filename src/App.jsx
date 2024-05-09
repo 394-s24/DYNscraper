@@ -51,7 +51,6 @@ const App = () => {
       <h1>Test</h1>
       <button onClick={download}>Download File</button>
       <br />
-      <button onClick={fetchData}>Fetch data</button>
     </div>
   );
 };
