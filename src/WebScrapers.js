@@ -25,6 +25,12 @@ const YMCAscraper = async (url) => {
 
       let address = null;
 
+      let city = null;
+
+      let state = null;
+
+      let zip = null;
+
       let description = "";
 
       let contact = null;
@@ -43,11 +49,24 @@ const YMCAscraper = async (url) => {
       }
 
       //break down the address
-      //console.log(address.split(","))
+      if (address) {
+        let address_components = address.split(",");
 
-      // for (const address_data of address.split(",")) {
-      //   console.log(address_data.trim())
-      // }
+        // this should be the address
+        address = address_components[0].trim();
+
+        // this should be the city
+        city = address_components[1].trim();
+
+        // this should be the state and zip so we break it down further
+        let state_zip = address_components[2].trim().split(" ");
+
+        // this should be the state
+        state = state_zip[0];
+
+        // this should be the zip
+        zip = state_zip[1];
+      }
 
       const event_rows = await event.querySelectorAll(
         ".program-table tbody tr"
@@ -60,7 +79,12 @@ const YMCAscraper = async (url) => {
 
         entry["Description"] = description;
 
-        address ? (entry["Address"] = address) : null;
+        if (address) {
+          entry["Address"] = address;
+          entry["City"] = city;
+          entry["State"] = state;
+          entry["Zipcode"] = zip;
+        }
 
         contact ? (entry["Contact"] = contact) : null;
 
@@ -79,16 +103,16 @@ const YMCAscraper = async (url) => {
             if (event_data_label.innerText === "Date") {
               let dates = event_data_value.innerHTML.split("<br>");
               try {
-                entry["Start Date"] = dates[0].split(" ")[1];
-                entry["End Date"] = dates[1].split(" ")[1];
+                entry["Start_Date"] = dates[0].split(" ")[1];
+                entry["End_Date"] = dates[1].split(" ")[1];
               } catch (err) {
                 console.log("error is ", err);
               }
             } else if (event_data_label.innerText === "Time") {
               try {
                 let times = event_data_value.innerHTML.split("<br>");
-                entry["Start Time"] = times[0].split(" ")[1];
-                entry["End Time"] = times[1].split(" ")[1];
+                entry["Start_Time"] = times[0].split(" ")[1];
+                entry["End_Time"] = times[1].split(" ")[1];
               } catch (err) {
                 console.log("error is ", err);
               }
@@ -98,6 +122,23 @@ const YMCAscraper = async (url) => {
                 entry["Day"] = days;
               } catch (err) {
                 console.log("error is ", err);
+              }
+            } else if (event_data_label.innerText === "Age") {
+              const age_breakdown = event_data_value.innerText.split("-");
+              if (age_breakdown.length === 2) {
+                entry["Min_Age"] = age_breakdown[0].trim();
+                entry["Max_Age"] = age_breakdown[1].trim();
+              }
+            } else if (event_data_label.innerText === "Cost") {
+              let cost_html = event_data_value;
+              const cost_details = await cost_html.querySelectorAll("span")
+              for (const cost_detail of cost_details) {
+                //console.log("cost detail is ", cost_detail.innerText);
+                if (cost_detail.innerText.includes("Member")) {
+                  entry["Member_Cost"] = cost_detail.innerText.split(":")[1];
+                } else if (cost_detail.innerText.includes("Non-Member")) {
+                  entry["Non_Member_Cost"] = cost_detail.innerText.split(":")[1];
+                }
               }
             } else {
               entry[event_data_label.innerText] = event_data_value.innerHTML;
@@ -111,7 +152,7 @@ const YMCAscraper = async (url) => {
 
   console.log("programs are ", programs);
 
-  console.log("example description is", programs[0]["Description"]);
+  //console.log("example description is", programs[0]["Description"]);
 
   return programs;
 };
