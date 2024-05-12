@@ -4,9 +4,12 @@ import "./App.css";
 import { YMCAscraper } from "./WebScrapers.js";
 
 const App = () => {
+  const [urlValue, setUrlValue] = useState("");
+  const [scrapingData, setScrapingData] = useState([{}]);
+
   // based on https://javascript.plainenglish.io/javascript-create-file-c36f8bccb3be
   const data = "foo,bar,\nfi,fie,fo,fum";
-  console.log("testing download");
+  //  console.log("testing download");
   const file = new File([data], "new-note.csv", {
     type: "text/csv",
   });
@@ -43,14 +46,25 @@ const App = () => {
     window.URL.revokeObjectURL(url);
   }
 
-  YMCAscraper("https://www.ymcachicago.org/program-search/?locations=BU&locations=CF&locations=EL&locations=FO&locations=FR&locations=GL&locations=HL&locations=IB&locations=IP&locations=KH&locations=LV&locations=MT&locations=RA&locations=SA&locations=SS&locations=SN&locations=CH&keywords=");
+  const getData = async (event) => {
+    event.preventDefault();
 
+    if (urlValue.includes("ymca")){
+      setScrapingData(YMCAscraper(urlValue));
+    }
+  }
 
   return (
     <div className="App">
       <h1>Test</h1>
       <button onClick={download}>Download File</button>
       <br />
+      <form onSubmit={(e) => getData(e)}>
+        <p>Enter YMCA Program Search URL</p>
+        <input type="url" value = {urlValue}  onChange = {(e) => setUrlValue(e.target.value)} required/>
+        <br />
+        <button type="submit">Get Data</button>
+      </form>
     </div>
   );
 };
