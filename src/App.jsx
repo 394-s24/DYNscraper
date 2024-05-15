@@ -11,6 +11,7 @@ const App = () => {
   const [urlValue, setUrlValue] = useState("");
   const [scrapingData, setScrapingData] = useState([{}]);
   const [resultFile, setResultFile] = useState(null);
+  const [urlError, setUrlError] = useState("");
 
   var file;
 
@@ -82,13 +83,15 @@ const App = () => {
         row[6] = item["Min_Age"];
         row[7] = item["Max_Age"];
         row[9] = item["Location"];
+        row[14] = item["program_url"];
         row[16] = item["Start_Date"];
         row[17] = item["End_Date"];
         row[18] = item["Start_Time"];
         row[19] = item["End_Time"];
         row[24] = "Member cost " + item["Member_Cost"] + " Non-member cost " + item["Non_Member_Cost"];
-        // fileData.push(row.toString() + "\n");
-        fileData.push(row);
+        row[27] = item["internal_id"];
+        fileData.push(row.toString() + "\n");
+        // fileData.push(row);
         
       })
 
@@ -103,8 +106,21 @@ const App = () => {
         
       }
 
+      setUrlError("");
       
     }
+    else{
+      setUrlError("This url type is not supported. Please enter a valid YMCA Program Search URL.")
+    }
+  }
+
+  let error = <br/>
+
+  if (urlError != "") {
+    error = <p style = {{color:"red"}}>{urlError}</p>
+  }
+  else {
+    error = <br/>
   }
 
   return (
@@ -114,7 +130,7 @@ const App = () => {
       <form onSubmit={(e) => getData(e)}>
         <p>Enter YMCA Program Search URL</p>
         <input type="url" value = {urlValue}  onChange = {(e) => setUrlValue(e.target.value)} required/>
-        <br />
+        {error}
         <Button type="submit" style={{margin: '5px' }}>Get Data</Button>
         <br />
         <Button id="download-button" onClick={download} style={{ display: 'none', margin: '5px' }}>Download CSV</Button>
