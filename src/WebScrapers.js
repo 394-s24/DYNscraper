@@ -149,6 +149,7 @@ const YMCAscraper = async (url) => {
                 ".program-table__reveal-content"
               ).innerText;
               entry["internal_id"] = ID;
+              entry["program_url"] = "https://www.ymcachicago.org/program-search/?keywords=" + ID;
             } else {
               entry[program_data_label.innerText] =
                 program_data_value.innerHTML;
