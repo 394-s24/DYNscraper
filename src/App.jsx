@@ -90,9 +90,9 @@ const App = () => {
         row[19] = item["End_Time"];
         row[24] = "Member cost " + item["Member_Cost"] + " Non-member cost " + item["Non_Member_Cost"];
         row[27] = item["internal_id"];
-        fileData.push(row.toString() + "\n");
-        // fileData.push(row);
-        
+        // fileData.push(row.toString() + "\n");
+        fileData.push(row);
+        // 
       })
 
       fileData.unshift(header);
