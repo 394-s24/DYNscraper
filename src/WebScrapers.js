@@ -2,14 +2,14 @@ const YMCAscraper = async (url) => {
   console.log("url is ", url);
   console.log("running YMCA web scraper");
   const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(url); // fixing cors error using this
-  const response = await fetch(proxyUrl);
+  const response = await fetch(proxyUrl); // getting html from website
   const programs_scraped = [];
   if (!response.ok) {
     alert(response.statusText);
   } else {
     const text = await response.text();
-    const doc = new DOMParser().parseFromString(text, "text/html");
-    const programs = doc.querySelectorAll(
+    const doc = new DOMParser().parseFromString(text, "text/html"); //making sure we get stuff, and parsing. making sure html is there
+    const programs = doc.querySelectorAll( //going thru html
       ".section-container .section-container"
     );
 
@@ -83,7 +83,7 @@ const YMCAscraper = async (url) => {
 
         contact ? (entry["Contact"] = contact) : null;
 
-        const program_data = data.querySelectorAll("td");
+        const program_data = data.querySelectorAll("td"); // gets date,time,age,cost
 
         for (let i = 0; i < program_data.length; i++) {
           const program_data_label = await program_data[i].querySelector(
@@ -150,6 +150,37 @@ const YMCAscraper = async (url) => {
               ).innerText;
               entry["internal_id"] = ID;
               entry["program_url"] = "https://www.ymcachicago.org/program-search/?keywords=" + ID;
+             } else if (program_data_label.innerText === "Location") {
+                const addressDictionary = {"Indian Boundary YMCA": ['711 59th St', 'Downers Grove','IL','60516'], 
+                "Buehler YMCA": ['1400 W Northwest Hwy', 'Palatine','IL','60067'],
+                "Crown Family YMCA": ['1030 W Van Buren St', 'Chicago','IL','60067'],
+                "Buehler YMCA": ['1400 W Northwest Hwy', 'Palatine','IL','60067'],
+                "Elmhurst YMCA": ['211 W 1st St', 'Elmhurst','IL','60126'],
+                "Foglia YMCA": ['1025 N Old McHenry Rd', 'Lake Zurich','IL','60047'],
+                "Fry Family YMCA": ['2120 95th St', 'Naperville','IL','60564'],
+                "Greater LaGrange YMCA": ['1100 E 31st St', 'La Grange Park','IL','60526'],
+                "Hastings Lake YMCA": ['1995 W Grass Lake Rd', 'Lindenhurst','IL','60046'],
+                "Irving Park YMCA": ['4251 W Irving Park Rd', 'Chicago','IL','60641'],
+                "Kelly Hall YMCA": ['824 N Hamlin Ave', 'Chicago','IL','60651'],
+                "Lake View YMCA": ['3333 N Marshfield Ave', 'Chicago','IL','60657'],
+                "McCormick YMCA": ['1834 N Lawndale Ave', 'Chicago','IL','60647'],
+                "Rauner Family YMCA": ['2700 S Western Ave', 'Chicago','IL','60608'],
+                "Sage YMCA": ['701 Manor Rd', 'Crystal Lake','IL','60014'],
+                "South Side YMCA": ['6330 S Stony Is Ave', 'Chicago','IL','60637'],
+                "YMCA Safe 'n Sound": ['2120 95th St', 'Naperville','IL','60564']
+              }
+                try {const addressData = program_data_value.innerText
+                  entry["Address"] = addressDictionary[addressData][0]
+                  entry["City"] = addressDictionary[addressData][1]
+                  entry["State"] = addressDictionary[addressData][2]
+                  entry["Zipcode"] = addressDictionary[addressData][3]
+                  entry["Location"] = program_data_value.innerText
+                }
+                  catch{
+                    entry["Location"] = program_data_value.innerText
+                  }
+                
+            
             } else {
               entry[program_data_label.innerText] =
                 program_data_value.innerHTML;

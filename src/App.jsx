@@ -83,6 +83,10 @@ const App = () => {
         row[6] = item["Min_Age"];
         row[7] = item["Max_Age"];
         row[9] = item["Location"];
+        row[10] = item["Address"];
+        row[11] = item["City"];
+        row[12] = item["State"];
+        row[13] = item["Zipcode"];
         row[14] = item["program_url"];
         row[16] = item["Start_Date"];
         row[17] = item["End_Date"];
