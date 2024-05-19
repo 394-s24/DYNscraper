@@ -3,29 +3,39 @@ const YMCAscraper = async (url) => {
   console.log("running YMCA web scraper");
   const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(url); // fixing cors error using this
 
-  const urlObj = new URL(url);
+  function generateURLlist(url) {
+    const urlObj = new URL(url);
+    var result = [];
 
-  var categories = urlObj.searchParams.getAll('programs');
+    var categories = urlObj.searchParams.getAll('programs');
 
-  console.log(urlObj.searchParams);
+    console.log(urlObj.searchParams);
 
-  categories.forEach((category) => {
-    // remove all the other categories besides one we iterate on
-    categories.forEach((i) => {
-      if (i != category) {
-        urlObj.searchParams.delete('programs', i);
-      }
+    categories.forEach((category) => {
+      // remove all the other categories besides one we iterate on
+      categories.forEach((i) => {
+        if (i != category) {
+          urlObj.searchParams.delete('programs', i);
+        }
+      });
+      url = urlObj.toString();
+      result.push(url);
     });
+    return result;
+  }
 
-    url = urlObj.toString();
+  const programs_scraped = {};
+  // generateURLlist(url).forEach(async (url) => {
+
+  // });
     
-    
-  });
+
+
 
 
 
   const response = await fetch(proxyUrl); // getting html from website
-  const programs_scraped = [];
+  
   if (!response.ok) {
     alert(response.statusText);
   } else {
@@ -214,8 +224,8 @@ const YMCAscraper = async (url) => {
             }
           }
         }
-
-        programs_scraped.push(entry);
+        programs_scraped[entry["internal_id"]] = entry;
+        // programs_scraped.push(entry);
       }
     }
   }

@@ -63,7 +63,7 @@ const App = () => {
       if (document.getElementById("download-button").style.display == "inline") {
         document.getElementById("download-button").style.display = "none";
       }
-      var sdata = await YMCAscraper(urlValue)
+      var sdata = await YMCAscraper(urlValue);
       console.log(sdata)
       setScrapingData(sdata)
 
@@ -72,8 +72,9 @@ const App = () => {
       const header = ["Folder_Name","Program_Name","Program_Description","Logo_URL","Category","Program_Capacity","Min_Age","Max_Age","Meeting_Type","Location_Name","Address","City","State","Zipcode","Program_URL","Registration_URL","Start_Date","End_Date","Start_Time","End_Time","Registration_Deadline","Contact_Name","Contact_Email","Contact_Phone","Price","Extra_Data","online_address","dosage","internal_id","neighborhood","community","ward"];
 
 
-
-      sdata.forEach((item) => {
+      for (var key in sdata) {
+        var item = sdata[key];
+      // sdata.forEach((item) => {
         var row = Array(32).fill("");
         // row[1] = "\"" + item["Title"].replaceAll(",", "\,").replaceAll(/"/g, '\"') + "\"";
         row[1] = item["Title"];
@@ -100,7 +101,7 @@ const App = () => {
         // fileData.push(row.toString() + "\n");
         fileData.push(row);
         // 
-      })
+      }
 
       fileData.unshift(header);
       var ws = utils.aoa_to_sheet(fileData, {bookType: 'xlsx', type: 'string'});
