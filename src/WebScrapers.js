@@ -2,6 +2,28 @@ const YMCAscraper = async (url) => {
   console.log("url is ", url);
   console.log("running YMCA web scraper");
   const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(url); // fixing cors error using this
+
+  const urlObj = new URL(url);
+
+  var categories = urlObj.searchParams.getAll('programs');
+
+  console.log(urlObj.searchParams);
+
+  categories.forEach((category) => {
+    // remove all the other categories besides one we iterate on
+    categories.forEach((i) => {
+      if (i != category) {
+        urlObj.searchParams.delete('programs', i);
+      }
+    });
+
+    url = urlObj.toString();
+    
+    
+  });
+
+
+
   const response = await fetch(proxyUrl); // getting html from website
   const programs_scraped = [];
   if (!response.ok) {
@@ -150,30 +172,35 @@ const YMCAscraper = async (url) => {
               ).innerText;
               entry["internal_id"] = ID;
               entry["program_url"] = "https://www.ymcachicago.org/program-search/?keywords=" + ID;
-             } else if (program_data_label.innerText === "Location") {
-                const addressDictionary = {"Indian Boundary YMCA": ['711 59th St', 'Downers Grove','IL','60516'], 
-                "Buehler YMCA": ['1400 W Northwest Hwy', 'Palatine','IL','60067'],
-                "Crown Family YMCA": ['1030 W Van Buren St', 'Chicago','IL','60067'],
-                "Buehler YMCA": ['1400 W Northwest Hwy', 'Palatine','IL','60067'],
-                "Elmhurst YMCA": ['211 W 1st St', 'Elmhurst','IL','60126'],
-                "Foglia YMCA": ['1025 N Old McHenry Rd', 'Lake Zurich','IL','60047'],
-                "Fry Family YMCA": ['2120 95th St', 'Naperville','IL','60564'],
-                "Greater LaGrange YMCA": ['1100 E 31st St', 'La Grange Park','IL','60526'],
-                "Hastings Lake YMCA": ['1995 W Grass Lake Rd', 'Lindenhurst','IL','60046'],
-                "Irving Park YMCA": ['4251 W Irving Park Rd', 'Chicago','IL','60641'],
-                "Kelly Hall YMCA": ['824 N Hamlin Ave', 'Chicago','IL','60651'],
-                "Lake View YMCA": ['3333 N Marshfield Ave', 'Chicago','IL','60657'],
-                "McCormick YMCA": ['1834 N Lawndale Ave', 'Chicago','IL','60647'],
-                "Rauner Family YMCA": ['2700 S Western Ave', 'Chicago','IL','60608'],
-                "Sage YMCA": ['701 Manor Rd', 'Crystal Lake','IL','60014'],
-                "South Side YMCA": ['6330 S Stony Is Ave', 'Chicago','IL','60637'],
-                "YMCA Safe 'n Sound": ['2120 95th St', 'Naperville','IL','60564']
+            } else if (program_data_label.innerText === "Location") {
+              // address, city, state, zip, neighborhood, community, ward
+              // https://www.chicagotribune.com/2023/01/26/search-to-find-out-what-chicago-neighborhood-community-area-and-ward-you-live-in/#:~:text=The%20Chicago%20Boundaries%20Map%20allows,by%20the%20city%20of%20Chicago.
+                const addressDictionary = {"Indian Boundary YMCA": ['711 59th St', 'Downers Grove','IL','60516', '','',''], 
+                "Buehler YMCA": ['1400 W Northwest Hwy', 'Palatine','IL','60067','','',''],
+                "Crown Family YMCA": ['1030 W Van Buren St', 'Chicago','IL','60067','','',''],
+                "Buehler YMCA": ['1400 W Northwest Hwy', 'Palatine','IL','60067','','',''],
+                "Elmhurst YMCA": ['211 W 1st St', 'Elmhurst','IL','60126','','',''],
+                "Foglia YMCA": ['1025 N Old McHenry Rd', 'Lake Zurich','IL','60047','','',''],
+                "Fry Family YMCA": ['2120 95th St', 'Naperville','IL','60564','','',''],
+                "Greater LaGrange YMCA": ['1100 E 31st St', 'La Grange Park','IL','60526','','',''],
+                "Hastings Lake YMCA": ['1995 W Grass Lake Rd', 'Lindenhurst','IL','60046','','',''],
+                "Irving Park YMCA": ['4251 W Irving Park Rd', 'Chicago','IL','60641','','',''],
+                "Kelly Hall YMCA": ['824 N Hamlin Ave', 'Chicago','IL','60651', 'Humboldt Park', "Humboldt Park", "27"],
+                "Lake View YMCA": ['3333 N Marshfield Ave', 'Chicago','IL','60657','','',''],
+                "McCormick YMCA": ['1834 N Lawndale Ave', 'Chicago','IL','60647','','',''],
+                "Rauner Family YMCA": ['2700 S Western Ave', 'Chicago','IL','60608','','',''],
+                "Sage YMCA": ['701 Manor Rd', 'Crystal Lake','IL','60014','','',''],
+                "South Side YMCA": ['6330 S Stony Is Ave', 'Chicago','IL','60637','','',''],
+                "YMCA Safe 'n Sound": ['2120 95th St', 'Naperville','IL','60564','','','']
               }
                 try {const addressData = program_data_value.innerText
                   entry["Address"] = addressDictionary[addressData][0]
                   entry["City"] = addressDictionary[addressData][1]
                   entry["State"] = addressDictionary[addressData][2]
                   entry["Zipcode"] = addressDictionary[addressData][3]
+                  entry["neighborhood"] = addressDictionary[addressData][4]
+                  entry["community"] = addressDictionary[addressData][5]
+                  entry["ward"] = addressDictionary[addressData][6]
                   entry["Location"] = program_data_value.innerText
                 }
                   catch{

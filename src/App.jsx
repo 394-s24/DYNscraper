@@ -93,7 +93,10 @@ const App = () => {
         row[18] = item["Start_Time"];
         row[19] = item["End_Time"];
         row[24] = "Member cost " + item["Member_Cost"] + " Non-member cost " + item["Non_Member_Cost"];
-        row[27] = item["internal_id"];
+        row[28] = item["internal_id"];
+        row[28] = item["neighborhood"];
+        row[28] = item["community"];
+        row[28] = item["ward"];
         // fileData.push(row.toString() + "\n");
         fileData.push(row);
         // 
