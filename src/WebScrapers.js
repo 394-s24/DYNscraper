@@ -1,56 +1,72 @@
-const YMCAscraper = async (url) => {
+const urlSplitter = async (url) => {
+  const urlObj = new URL(url);
+  let urls = [];
+
+  let categories = urlObj.searchParams.getAll("programs");
+
+  console.log("categories are", categories);
+
+  // create list of urls with only one category
+  categories.forEach((category) => {
+    // remove all the other categories besides one we iterate on
+    let category_based_url = new URL(url);
+
+    // remove all the categories
+    categories.forEach((i) => {
+      category_based_url.searchParams.delete("programs", i);
+    });
+
+    // add the category we want
+    category_based_url.searchParams.set("programs", category);
+
+    // add the url to the list
+    urls.push(category_based_url.href);
+  });
+
+  let programs = {};
+
+  for (const url of urls) {
+    programs = await YMCAscraper(url, programs);
+    console.log("programs are ", programs);
+  }
+
+  return programs;
+};
+
+const YMCAscraper = async (url, previous_data) => {
+  const urlObj = new URL(url);
+  const current_category = urlObj.searchParams.get("programs");
+
   console.log("url is ", url);
   console.log("running YMCA web scraper");
   const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(url); // fixing cors error using this
 
-  function generateURLlist(url) {
-    const urlObj = new URL(url);
-    var result = [];
-
-    var categories = urlObj.searchParams.getAll('programs');
-
-    console.log(urlObj.searchParams);
-
-    categories.forEach((category) => {
-      // remove all the other categories besides one we iterate on
-      categories.forEach((i) => {
-        if (i != category) {
-          urlObj.searchParams.delete('programs', i);
-        }
-      });
-      url = urlObj.toString();
-      result.push(url);
-    });
-    return result;
-  }
-
-  const programs_scraped = {};
-  // generateURLlist(url).forEach(async (url) => {
-
-  // });
-    
-
-
-
-
-
   const response = await fetch(proxyUrl); // getting html from website
-  
+
   if (!response.ok) {
     alert(response.statusText);
   } else {
     const text = await response.text();
     const doc = new DOMParser().parseFromString(text, "text/html"); //making sure we get stuff, and parsing. making sure html is there
-    const programs = doc.querySelectorAll( //going thru html
+    const programs = doc.querySelectorAll(
+      //going thru html
       ".section-container .section-container"
     );
 
     for (const program of programs) {
       const program_title = await program.querySelector(".program-desc__title");
 
-      let program_description_data = await program
+      let program_description_data = []
+
+      try{
+        program_description_data = await program
         .querySelector(".program-desc__content")
         .innerText.split("\n");
+      }
+      catch{
+        console.log("error getting program description data for", program);
+      }
+ 
 
       let address = null;
       let description = "";
@@ -181,57 +197,196 @@ const YMCAscraper = async (url) => {
                 ".program-table__reveal-content"
               ).innerText;
               entry["internal_id"] = ID;
-              entry["program_url"] = "https://www.ymcachicago.org/program-search/?keywords=" + ID;
+              entry["program_url"] =
+                "https://www.ymcachicago.org/program-search/?keywords=" + ID;
             } else if (program_data_label.innerText === "Location") {
               // address, city, state, zip, neighborhood, community, ward
               // https://www.chicagotribune.com/2023/01/26/search-to-find-out-what-chicago-neighborhood-community-area-and-ward-you-live-in/#:~:text=The%20Chicago%20Boundaries%20Map%20allows,by%20the%20city%20of%20Chicago.
-                const addressDictionary = {"Indian Boundary YMCA": ['711 59th St', 'Downers Grove','IL','60516', '','',''], 
-                "Buehler YMCA": ['1400 W Northwest Hwy', 'Palatine','IL','60067','','',''],
-                "Crown Family YMCA": ['1030 W Van Buren St', 'Chicago','IL','60067','','',''],
-                "Buehler YMCA": ['1400 W Northwest Hwy', 'Palatine','IL','60067','','',''],
-                "Elmhurst YMCA": ['211 W 1st St', 'Elmhurst','IL','60126','','',''],
-                "Foglia YMCA": ['1025 N Old McHenry Rd', 'Lake Zurich','IL','60047','','',''],
-                "Fry Family YMCA": ['2120 95th St', 'Naperville','IL','60564','','',''],
-                "Greater LaGrange YMCA": ['1100 E 31st St', 'La Grange Park','IL','60526','','',''],
-                "Hastings Lake YMCA": ['1995 W Grass Lake Rd', 'Lindenhurst','IL','60046','','',''],
-                "Irving Park YMCA": ['4251 W Irving Park Rd', 'Chicago','IL','60641','','',''],
-                "Kelly Hall YMCA": ['824 N Hamlin Ave', 'Chicago','IL','60651', 'Humboldt Park', "Humboldt Park", "27"],
-                "Lake View YMCA": ['3333 N Marshfield Ave', 'Chicago','IL','60657','','',''],
-                "McCormick YMCA": ['1834 N Lawndale Ave', 'Chicago','IL','60647','','',''],
-                "Rauner Family YMCA": ['2700 S Western Ave', 'Chicago','IL','60608','','',''],
-                "Sage YMCA": ['701 Manor Rd', 'Crystal Lake','IL','60014','','',''],
-                "South Side YMCA": ['6330 S Stony Is Ave', 'Chicago','IL','60637','','',''],
-                "YMCA Safe 'n Sound": ['2120 95th St', 'Naperville','IL','60564','','','']
+              const addressDictionary = {
+                "Indian Boundary YMCA": [
+                  "711 59th St",
+                  "Downers Grove",
+                  "IL",
+                  "60516",
+                  "",
+                  "",
+                  "",
+                ],
+                "Buehler YMCA": [
+                  "1400 W Northwest Hwy",
+                  "Palatine",
+                  "IL",
+                  "60067",
+                  "",
+                  "",
+                  "",
+                ],
+                "Crown Family YMCA": [
+                  "1030 W Van Buren St",
+                  "Chicago",
+                  "IL",
+                  "60067",
+                  "",
+                  "",
+                  "",
+                ],
+                "Buehler YMCA": [
+                  "1400 W Northwest Hwy",
+                  "Palatine",
+                  "IL",
+                  "60067",
+                  "",
+                  "",
+                  "",
+                ],
+                "Elmhurst YMCA": [
+                  "211 W 1st St",
+                  "Elmhurst",
+                  "IL",
+                  "60126",
+                  "",
+                  "",
+                  "",
+                ],
+                "Foglia YMCA": [
+                  "1025 N Old McHenry Rd",
+                  "Lake Zurich",
+                  "IL",
+                  "60047",
+                  "",
+                  "",
+                  "",
+                ],
+                "Fry Family YMCA": [
+                  "2120 95th St",
+                  "Naperville",
+                  "IL",
+                  "60564",
+                  "",
+                  "",
+                  "",
+                ],
+                "Greater LaGrange YMCA": [
+                  "1100 E 31st St",
+                  "La Grange Park",
+                  "IL",
+                  "60526",
+                  "",
+                  "",
+                  "",
+                ],
+                "Hastings Lake YMCA": [
+                  "1995 W Grass Lake Rd",
+                  "Lindenhurst",
+                  "IL",
+                  "60046",
+                  "",
+                  "",
+                  "",
+                ],
+                "Irving Park YMCA": [
+                  "4251 W Irving Park Rd",
+                  "Chicago",
+                  "IL",
+                  "60641",
+                  "",
+                  "",
+                  "",
+                ],
+                "Kelly Hall YMCA": [
+                  "824 N Hamlin Ave",
+                  "Chicago",
+                  "IL",
+                  "60651",
+                  "Humboldt Park",
+                  "Humboldt Park",
+                  "27",
+                ],
+                "Lake View YMCA": [
+                  "3333 N Marshfield Ave",
+                  "Chicago",
+                  "IL",
+                  "60657",
+                  "",
+                  "",
+                  "",
+                ],
+                "McCormick YMCA": [
+                  "1834 N Lawndale Ave",
+                  "Chicago",
+                  "IL",
+                  "60647",
+                  "",
+                  "",
+                  "",
+                ],
+                "Rauner Family YMCA": [
+                  "2700 S Western Ave",
+                  "Chicago",
+                  "IL",
+                  "60608",
+                  "",
+                  "",
+                  "",
+                ],
+                "Sage YMCA": [
+                  "701 Manor Rd",
+                  "Crystal Lake",
+                  "IL",
+                  "60014",
+                  "",
+                  "",
+                  "",
+                ],
+                "South Side YMCA": [
+                  "6330 S Stony Is Ave",
+                  "Chicago",
+                  "IL",
+                  "60637",
+                  "",
+                  "",
+                  "",
+                ],
+                "YMCA Safe 'n Sound": [
+                  "2120 95th St",
+                  "Naperville",
+                  "IL",
+                  "60564",
+                  "",
+                  "",
+                  "",
+                ],
+              };
+              try {
+                const addressData = program_data_value.innerText;
+                entry["Address"] = addressDictionary[addressData][0];
+                entry["City"] = addressDictionary[addressData][1];
+                entry["State"] = addressDictionary[addressData][2];
+                entry["Zipcode"] = addressDictionary[addressData][3];
+                entry["neighborhood"] = addressDictionary[addressData][4];
+                entry["community"] = addressDictionary[addressData][5];
+                entry["ward"] = addressDictionary[addressData][6];
+                entry["Location"] = program_data_value.innerText;
+              } catch {
+                entry["Location"] = program_data_value.innerText;
               }
-                try {const addressData = program_data_value.innerText
-                  entry["Address"] = addressDictionary[addressData][0]
-                  entry["City"] = addressDictionary[addressData][1]
-                  entry["State"] = addressDictionary[addressData][2]
-                  entry["Zipcode"] = addressDictionary[addressData][3]
-                  entry["neighborhood"] = addressDictionary[addressData][4]
-                  entry["community"] = addressDictionary[addressData][5]
-                  entry["ward"] = addressDictionary[addressData][6]
-                  entry["Location"] = program_data_value.innerText
-                }
-                  catch{
-                    entry["Location"] = program_data_value.innerText
-                  }
-                
-            
             } else {
               entry[program_data_label.innerText] =
                 program_data_value.innerHTML;
             }
           }
         }
-        programs_scraped[entry["internal_id"]] = entry;
-        // programs_scraped.push(entry);
+        if (previous_data[entry["internal_id"]] === undefined) {
+          entry["Category"] = current_category;
+          previous_data[entry["internal_id"]] = entry;
+        } else {
+          previous_data[entry["internal_id"]]["Category"].append(", " + current_category);
+        }
       }
     }
   }
 
-  console.log("programs are ", programs_scraped);
-  return programs_scraped;
+  return previous_data;
 };
 
-export { YMCAscraper };
+export { YMCAscraper, urlSplitter };

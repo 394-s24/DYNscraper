@@ -1,7 +1,7 @@
 import { useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { YMCAscraper } from "./WebScrapers.js";
+import { YMCAscraper, urlSplitter } from "./WebScrapers.js";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 // sheetJS import
@@ -63,7 +63,8 @@ const App = () => {
       if (document.getElementById("download-button").style.display == "inline") {
         document.getElementById("download-button").style.display = "none";
       }
-      var sdata = await YMCAscraper(urlValue);
+      var sdata = await urlSplitter(urlValue);
+
       console.log(sdata)
       setScrapingData(sdata)
 
@@ -80,6 +81,7 @@ const App = () => {
         row[1] = item["Title"];
         // row[2] = "\"" + item["Description"].replaceAll(",", "\,").replaceAll(/"/g, '\"') + "\"";
         row[2] = item["Description"];
+        row[4] = item["Category"];
         row[5] = item["Spots Remaining"].split("of")[1].trim();
         row[6] = item["Min_Age"];
         row[7] = item["Max_Age"];
