@@ -1,0 +1,12 @@
+.scrollable-table-container {
+    max-height: 800px;
+    overflow-y: auto;
+    overflow-x: auto;
+  }
+  
+  .scrollable-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1; /* Ensure the header is above other content */
+  }
