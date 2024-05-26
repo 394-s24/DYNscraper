@@ -6,7 +6,28 @@ const urlSplitter = async (url) => {
 
   let categories = urlObj.searchParams.getAll("programs");
 
-  // console.log("categories are", categories);
+  console.log("categories are", categories);
+
+  console.log("number of categories are ", categories.length);
+
+  if (categories.length == 0) {
+    categories = [
+      "DC-Day Camp",
+      "AQ-Aquatics",
+      "CC-Child Care",
+      "FM-Family Programming",
+      "OT-Other",
+      "PT-Personal Training",
+      "RE-Rentals",
+      "SR-Sports & Recreation",
+      "VT-Virtual Program",
+      "YD-Youth Development Human Services H.D.",
+      "HF-Health & Fitness",
+      "FH-Field House",
+      "R-Not defined",
+      "STR-Not defined",
+    ];
+  }
 
   // create list of urls with only one category
   categories.forEach((category) => {
@@ -62,9 +83,7 @@ const YMCAscraper = async (url, previous_data) => {
         program_description_data = await program
           .querySelector(".program-desc__content")
           .innerText.split("\n");
-      } catch {
-        
-      }
+      } catch {}
 
       let address = null;
       let description = "";
@@ -200,7 +219,7 @@ const YMCAscraper = async (url, previous_data) => {
             } else if (program_data_label.innerText === "Location") {
               // address, city, state, zip, neighborhood, community, ward
               // https://www.chicagotribune.com/2023/01/26/search-to-find-out-what-chicago-neighborhood-community-area-and-ward-you-live-in/#:~:text=The%20Chicago%20Boundaries%20Map%20allows,by%20the%20city%20of%20Chicago.
-              
+
               try {
                 const addressData = program_data_value.innerText;
                 entry["Address"] = addressDictionary[addressData][0];
