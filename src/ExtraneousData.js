@@ -7,6 +7,7 @@
 //     "neighborhood",
 //     "community",
 //     "ward",
+//     "phone number"
 // ]
 
 const addressDictionary = {
@@ -15,6 +16,7 @@ const addressDictionary = {
       "Downers Grove",
       "IL",
       "60516",
+      "",
       "",
       "",
       "",
@@ -27,6 +29,7 @@ const addressDictionary = {
       "",
       "",
       "",
+      "",
     ],
     "Crown Family YMCA": [
       "1030 W Van Buren St",
@@ -36,12 +39,14 @@ const addressDictionary = {
       "West Loop",
       "Near West Side",
       "28",
+      "",
     ],
     "Elmhurst YMCA": [
       "211 W 1st St",
       "Elmhurst",
       "IL",
       "60126",
+      "",
       "",
       "",
       "",
@@ -54,12 +59,14 @@ const addressDictionary = {
       "",
       "",
       "",
+      "",
     ],
     "Fry Family YMCA": [
       "2120 95th St",
       "Naperville",
       "IL",
       "60564",
+      "",
       "",
       "",
       "",
@@ -72,12 +79,14 @@ const addressDictionary = {
       "",
       "",
       "",
+      "",
     ],
     "Hastings Lake YMCA": [
       "1995 W Grass Lake Rd",
       "Lindenhurst",
       "IL",
       "60046",
+      "",
       "",
       "",
       "",
@@ -90,6 +99,7 @@ const addressDictionary = {
       "Irving Park",
       "Irving Park",
       "45",
+      "",
     ],
     "Kelly Hall YMCA": [
       "824 N Hamlin Ave",
@@ -99,6 +109,7 @@ const addressDictionary = {
       "Humboldt Park",
       "Humboldt Park",
       "27",
+      "",
     ],
     "Lake View YMCA": [
       "3333 N Marshfield Ave",
@@ -108,6 +119,7 @@ const addressDictionary = {
       "Lakeview",
       "Lake View",
       "44",
+      "",
     ],
     "McCormick YMCA": [
       "1834 N Lawndale Ave",
@@ -117,6 +129,7 @@ const addressDictionary = {
       "Logan Square",
       "Logan Square",
       "32",
+      "",
     ],
     "Rauner Family YMCA": [
       "2700 S Western Ave",
@@ -126,12 +139,14 @@ const addressDictionary = {
       "Little Village",
       "South Lawndale",
       "12",
+      "",
     ],
     "Sage YMCA": [
       "701 Manor Rd",
       "Crystal Lake",
       "IL",
       "60014",
+      "",
       "",
       "",
       "",
@@ -144,12 +159,14 @@ const addressDictionary = {
       "Woodlawn",
       "Woodlawn",
       "20",
+      "",
     ],
     "YMCA Safe 'n Sound": [
       "2120 95th St",
       "Naperville",
       "IL",
       "60564",
+      "",
       "",
       "",
       "",
