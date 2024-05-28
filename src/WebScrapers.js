@@ -230,6 +230,8 @@ const YMCAscraper = async (url, previous_data) => {
                 entry["community"] = addressDictionary[addressData][5];
                 entry["ward"] = addressDictionary[addressData][6];
                 entry["Location"] = program_data_value.innerText;
+                entry["Contact_Name"] = program_data_value.innerText;
+                entry["Contact_Phone"] = addressDictionary[addressData][7];
               } catch {
                 entry["Location"] = program_data_value.innerText;
               }

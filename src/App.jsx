@@ -101,6 +101,8 @@ const App = () => {
         row[29] = item["neighborhood"];
         row[30] = item["community"];
         row[31] = item["ward"];
+        row[21] = item["Contact_Name"]
+        row[23] = item["Contact_Phone"]
         // fileData.push(row.toString() + "\n");
         // console.log(row);
         fileData.push(row);
