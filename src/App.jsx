@@ -128,6 +128,7 @@ const App = () => {
       setUrlError(
         "This url type is not supported. Please enter a valid YMCA Program Search URL."
       );
+      setLoading(false)
     }
   };
 
