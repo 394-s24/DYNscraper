@@ -171,8 +171,8 @@ const YMCAscraper = async (url, previous_data) => {
             } else if (program_data_label.innerText === "Time") {
               try {
                 let times = program_data_value.innerHTML.split("<br>");
-                entry["Start_Time"] = times[0].split(" ")[1];
-                entry["End_Time"] = times[1].split(" ")[1];
+                entry["Start_Time"] = times[0].split(" ")[1] + " " + times[0].split(" ")[2];
+                entry["End_Time"] = times[1].split(" ")[1] + " " + times[1].split(" ")[2];
               } catch (err) {
                 console.log("error is ", err);
               }
