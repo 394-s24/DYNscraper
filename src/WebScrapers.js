@@ -171,8 +171,8 @@ const YMCAscraper = async (url, previous_data) => {
             } else if (program_data_label.innerText === "Time") {
               try {
                 let times = program_data_value.innerHTML.split("<br>");
-                entry["Start_Time"] = times[0].split(" ")[1];
-                entry["End_Time"] = times[1].split(" ")[1];
+                entry["Start_Time"] = times[0].split(" ")[1] + " " + times[0].split(" ")[2];
+                entry["End_Time"] = times[1].split(" ")[1] + " " + times[1].split(" ")[2];
               } catch (err) {
                 console.log("error is ", err);
               }
@@ -189,8 +189,8 @@ const YMCAscraper = async (url, previous_data) => {
             } else if (program_data_label.innerText === "Age") {
               const age_breakdown = program_data_value.innerText.split("-");
               if (age_breakdown.length === 2) {
-                entry["Min_Age"] = age_breakdown[0].trim();
-                entry["Max_Age"] = age_breakdown[1].trim();
+                entry["Min_Age"] = parseInt(age_breakdown[0].trim().split(" ")[0].trim());
+                entry["Max_Age"] = parseInt(age_breakdown[1].trim().split(" ")[0].trim());
               }
             } else if (program_data_label.innerText === "Cost") {
               let cost_html = program_data_value;
@@ -230,6 +230,8 @@ const YMCAscraper = async (url, previous_data) => {
                 entry["community"] = addressDictionary[addressData][5];
                 entry["ward"] = addressDictionary[addressData][6];
                 entry["Location"] = program_data_value.innerText;
+                entry["Contact_Name"] = program_data_value.innerText;
+                entry["Contact_Phone"] = addressDictionary[addressData][7];
               } catch {
                 entry["Location"] = program_data_value.innerText;
               }

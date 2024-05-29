@@ -7,6 +7,7 @@
 //     "neighborhood",
 //     "community",
 //     "ward",
+//     "phone number"
 // ]
 
 const addressDictionary = {
@@ -18,6 +19,7 @@ const addressDictionary = {
       "",
       "",
       "",
+      "(630) 968-8400",
     ],
     "Buehler YMCA": [
       "1400 W Northwest Hwy",
@@ -27,6 +29,7 @@ const addressDictionary = {
       "",
       "",
       "",
+      "(847) 359-2400",
     ],
     "Crown Family YMCA": [
       "1030 W Van Buren St",
@@ -36,6 +39,7 @@ const addressDictionary = {
       "West Loop",
       "Near West Side",
       "28",
+      "(312) 932-1200",
     ],
     "Elmhurst YMCA": [
       "211 W 1st St",
@@ -45,6 +49,7 @@ const addressDictionary = {
       "",
       "",
       "",
+      "(630) 834-9200",
     ],
     "Foglia YMCA": [
       "1025 N Old McHenry Rd",
@@ -54,6 +59,7 @@ const addressDictionary = {
       "",
       "",
       "",
+      "(847) 438-5300",
     ],
     "Fry Family YMCA": [
       "2120 95th St",
@@ -63,6 +69,7 @@ const addressDictionary = {
       "",
       "",
       "",
+      "(630) 904-9595",
     ],
     "Greater LaGrange YMCA": [
       "1100 E 31st St",
@@ -72,6 +79,7 @@ const addressDictionary = {
       "",
       "",
       "",
+      "(708) 352-7600",
     ],
     "Hastings Lake YMCA": [
       "1995 W Grass Lake Rd",
@@ -81,6 +89,7 @@ const addressDictionary = {
       "",
       "",
       "",
+      "(847) 356-4006",
     ],
     "Irving Park YMCA": [
       "4251 W Irving Park Rd",
@@ -90,6 +99,7 @@ const addressDictionary = {
       "Irving Park",
       "Irving Park",
       "45",
+      "(773) 777-7500",
     ],
     "Kelly Hall YMCA": [
       "824 N Hamlin Ave",
@@ -99,6 +109,7 @@ const addressDictionary = {
       "Humboldt Park",
       "Humboldt Park",
       "27",
+      "(773) 886-1220",
     ],
     "Lake View YMCA": [
       "3333 N Marshfield Ave",
@@ -108,6 +119,7 @@ const addressDictionary = {
       "Lakeview",
       "Lake View",
       "44",
+      "(773) 248-3333",
     ],
     "McCormick YMCA": [
       "1834 N Lawndale Ave",
@@ -117,6 +129,7 @@ const addressDictionary = {
       "Logan Square",
       "Logan Square",
       "32",
+      "(773) 235-2525",
     ],
     "Rauner Family YMCA": [
       "2700 S Western Ave",
@@ -126,6 +139,7 @@ const addressDictionary = {
       "Little Village",
       "South Lawndale",
       "12",
+      "(773) 847-3115",
     ],
     "Sage YMCA": [
       "701 Manor Rd",
@@ -135,6 +149,7 @@ const addressDictionary = {
       "",
       "",
       "",
+      "(815) 459-4455",
     ],
     "South Side YMCA": [
       "6330 S Stony Is Ave",
@@ -144,6 +159,7 @@ const addressDictionary = {
       "Woodlawn",
       "Woodlawn",
       "20",
+      "(773) 947-0700",
     ],
     "YMCA Safe 'n Sound": [
       "2120 95th St",
@@ -153,6 +169,7 @@ const addressDictionary = {
       "",
       "",
       "",
+      "(630) 585-2207",
     ],
   };
 
