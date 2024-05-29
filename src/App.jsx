@@ -92,11 +92,7 @@ const App = () => {
         row[17] = item["End_Date"];
         row[18] = item["Start_Time"];
         row[19] = item["End_Time"];
-        row[24] =
-          "Member cost " +
-          item["Member_Cost"] +
-          " Non-member cost " +
-          item["Non_Member_Cost"];
+        row[24] = item["Non_Member_Cost"];
         row[28] = item["internal_id"];
         row[29] = item["neighborhood"];
         row[30] = item["community"];

@@ -195,19 +195,38 @@ const YMCAscraper = async (url, previous_data) => {
             } else if (program_data_label.innerText === "Cost") {
               let cost_html = program_data_value;
               const cost_details = await cost_html.querySelectorAll("span");
+              if (cost_details.length == 0){
+                console.log("missing cost details")
+              }
               for (const cost_detail of cost_details) {
                 if (cost_detail.innerText.includes("Non-Member")) {
                   entry["Non_Member_Cost"] =
-                    cost_detail.innerText.split(":")[1];
-                  1;
+                    cost_detail.innerText.split(":")[1].replace("$", "");
+
+                  let cost = parseFloat(cost_detail.innerText.split(":")[1].replace("$", ""))
+
+                  if (cost > 50){
+                    entry["Non_Member_Cost"] = 2;
+                  }
+                  else if (cost <= 50){
+                    entry["Non_Member_Cost"] = 1;
+                  }
+                  else{
+                    console.log()
+                  }
                 } else if (cost_detail.innerText.includes("Member")) {
                   entry["Member_Cost"] = cost_detail.innerText.split(":")[1];
+
                 } else if (cost_detail) {
                   entry["Cost_additional_info"]
                     ? (entry["Cost_additional_info"] +=
                         " " + cost_detail.innerText)
                     : (entry["Cost_additional_info"] = cost_detail.innerText);
                 }
+              }
+              if (entry["Non_Member_Cost"] == null){
+                console.log("missing non member cost")
+                console.log(program_data_value)
               }
             } else if (program_data_label.innerText === "ID") {
               let ID = program_data_value.querySelector(
