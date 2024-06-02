@@ -9,7 +9,7 @@ import Button from "react-bootstrap/Button";
 // sheetJS import
 import { writeFile, utils, read, writeFileXLSX } from "xlsx";
 import DataPreview from "./DataPreview/DataPreview.jsx";
-import { header } from "./ExtraneousData.js";
+import { header, categoriesMap } from "./ExtraneousData.js";
 
 const App = () => {
   const [urlValue, setUrlValue] = useState("");
@@ -78,7 +78,8 @@ const App = () => {
         row[1] = item["Title"];
         // row[2] = "\"" + item["Description"].replaceAll(",", "\,").replaceAll(/"/g, '\"') + "\"";
         row[2] = item["Description"];
-        row[4] = item["Category"];
+        console.log(item["Category"])
+        row[4] = categoriesMap[item["Category"]]["dyn_category_number"];
         row[5] = item["Spots Remaining"].split("of")[1].trim();
         row[6] = item["Min_Age"];
         row[7] = item["Max_Age"];
@@ -92,11 +93,7 @@ const App = () => {
         row[17] = item["End_Date"];
         row[18] = item["Start_Time"];
         row[19] = item["End_Time"];
-        row[24] =
-          "Member cost " +
-          item["Member_Cost"] +
-          " Non-member cost " +
-          item["Non_Member_Cost"];
+        row[24] = item["Non_Member_Cost"];
         row[28] = item["internal_id"];
         row[29] = item["neighborhood"];
         row[30] = item["community"];
