@@ -9,7 +9,7 @@ import Button from "react-bootstrap/Button";
 // sheetJS import
 import { writeFile, utils, read, writeFileXLSX } from "xlsx";
 import DataPreview from "./DataPreview/DataPreview.jsx";
-import { header } from "./ExtraneousData.js";
+import { header, categoriesMap } from "./ExtraneousData.js";
 
 const App = () => {
   const [urlValue, setUrlValue] = useState("");
@@ -78,7 +78,8 @@ const App = () => {
         row[1] = item["Title"];
         // row[2] = "\"" + item["Description"].replaceAll(",", "\,").replaceAll(/"/g, '\"') + "\"";
         row[2] = item["Description"];
-        row[4] = item["Category"];
+        console.log(item["Category"])
+        row[4] = categoriesMap[item["Category"]]["dyn_category_number"];
         row[5] = item["Spots Remaining"].split("of")[1].trim();
         row[6] = item["Min_Age"];
         row[7] = item["Max_Age"];
