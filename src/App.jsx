@@ -19,12 +19,6 @@ const App = () => {
   const [isLoading, setLoading] = useState(false);
   var file;
 
-  // based on https://javascript.plainenglish.io/javascript-create-file-c36f8bccb3be
-  // const data = "foo,bar,\nfi,fie,fo,fum";
-  //  console.log("testing download");
-  // const file = new File([data], "new-note.csv", {
-  //   type: "text/csv",
-  // });
 
   // proof of concept from Riesbeck for fetching data from a website
   async function test() {
@@ -41,13 +35,11 @@ const App = () => {
       const firstEventTitle = doc.querySelector(
         ".section-container .section-container .program-desc__title"
       ).innerText;
-      //console.log(firstEventTitle);
     }
   }
 
   function download() {
     if (resultFile) {
-      //console.log("file exists");
       var wb = utils.book_new();
       utils.book_append_sheet(wb, resultFile, "Sheet1");
       writeFile(wb, "SheetJSExportAOA.csv");
@@ -64,21 +56,14 @@ const App = () => {
     setPreview([[]]);
 
     if (urlValue.includes("ymca")) {
-      // hide button so we can't click in middle
       var sdata = await urlSplitter(urlValue);
 
       var fileData = Array();
-      // const header = "Folder_Name,Program_Name,Program_Description,Logo_URL,Category,Program_Capacity,Min_Age,Max_Age,Meeting_Type,Location_Name,Address,City,State,Zipcode,Program_URL,Registration_URL,Start_Date,End_Date,Start_Time,End_Time,Registration_Deadline,Contact_Name,Contact_Email,Contact_Phone,Price,Extra_Data,online_address,dosage,internal_id,neighborhood,community,ward";
-
       for (var key in sdata) {
         var item = sdata[key];
-        // sdata.forEach((item) => {
         var row = Array(32).fill("");
-        // row[1] = "\"" + item["Title"].replaceAll(",", "\,").replaceAll(/"/g, '\"') + "\"";
         row[1] = item["Title"];
-        // row[2] = "\"" + item["Description"].replaceAll(",", "\,").replaceAll(/"/g, '\"') + "\"";
         row[2] = item["Description"];
-        console.log(item["Category"])
         row[4] = categoriesMap[item["Category"]]["dyn_category_number"];
         row[5] = item["Spots Remaining"].split("of")[1].trim();
         row[6] = item["Min_Age"];
@@ -100,16 +85,10 @@ const App = () => {
         row[31] = item["ward"];
         row[21] = item["Contact_Name"]
         row[23] = item["Contact_Phone"]
-        // fileData.push(row.toString() + "\n");
-        // console.log(row);
         fileData.push(row);
-        //
       }
 
       setPreview(fileData);
-
-      //console.log(preview);
-
       fileData.unshift(header);
       var ws = utils.aoa_to_sheet(fileData, {
         bookType: "xlsx",
@@ -119,7 +98,6 @@ const App = () => {
 
       if (ws) {
         setLoading(false);
-        //console.log("file created");
       }
 
       setUrlError("");

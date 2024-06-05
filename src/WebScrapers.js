@@ -6,10 +6,6 @@ const urlSplitter = async (url) => {
 
   let categories = urlObj.searchParams.getAll("programs");
 
-  console.log("categories are", categories);
-
-  console.log("number of categories are ", categories.length);
-
   if (categories.length == 0) {
     categories = [
       "DC-Day Camp",
@@ -50,7 +46,6 @@ const urlSplitter = async (url) => {
 
   for (const url of urls) {
     programs = await YMCAscraper(url, programs);
-    // console.log("programs are ", programs);
   }
 
   return programs;
@@ -195,9 +190,7 @@ const YMCAscraper = async (url, previous_data) => {
             } else if (program_data_label.innerText === "Cost") {
               let cost_html = program_data_value;
               const cost_details = await cost_html.querySelectorAll("span");
-              if (cost_details.length == 0){
-                console.log("missing cost details")
-              }
+              
               for (const cost_detail of cost_details) {
                 if (cost_detail.innerText.includes("Non-Member")) {
                   entry["Non_Member_Cost"] =
@@ -211,9 +204,6 @@ const YMCAscraper = async (url, previous_data) => {
                   else if (cost <= 50){
                     entry["Non_Member_Cost"] = 1;
                   }
-                  else{
-                    console.log()
-                  }
                 } else if (cost_detail.innerText.includes("Member")) {
                   entry["Member_Cost"] = cost_detail.innerText.split(":")[1];
 
@@ -223,10 +213,6 @@ const YMCAscraper = async (url, previous_data) => {
                         " " + cost_detail.innerText)
                     : (entry["Cost_additional_info"] = cost_detail.innerText);
                 }
-              }
-              if (entry["Non_Member_Cost"] == null){
-                console.log("missing non member cost")
-                console.log(program_data_value)
               }
             } else if (program_data_label.innerText === "ID") {
               let ID = program_data_value.querySelector(
