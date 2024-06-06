@@ -183,13 +183,13 @@ Gerardo Perez - gerardoperez2025@u.northwestern.edu
 
 Zach Delson - zachdelson2024@u.northwestern.edu
 
-Your Name - email@email_client.com
+Aditya Chakka - adityachakka2025@u.northwestern.edu
 
-Your Name - email@email_client.com
+Stephanie Ma - stephaniema2025@u.northwestern.edu
 
-Your Name - email@email_client.com
+Ege Yilmaz - egeyilmaz2023@u.northwestern.edu
 
-Your Name - email@email_client.com
+Ziyang Ling - ziyangling2024@u.northwestern.edu
 
 Project Link: [https://github.com/394-s24/DYNscraper](https://github.com/394-s24/DYNscraper)
 
