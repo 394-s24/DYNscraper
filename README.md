@@ -181,7 +181,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Gerardo Perez - gerardoperez2025@u.northwestern.edu
 
-Your Name - email@email_client.com
+Zach Delson - zachdelson2024@u.northwestern.edu
 
 Your Name - email@email_client.com
 
